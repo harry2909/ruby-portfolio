@@ -12,14 +12,17 @@ const photos = Object.values(photoModules)
 ---
 
 <div id='personal-work' class='min-h-dvh w-full flex items-center justify-center'>
-  <div class='w-full max-w-[1800px] px-4 md:px-8 xl:px-10 mx-auto'>
+  <div class='w-full max-w-[1800px] px-4 md:px-8 xl:px-10 py-6 md:py-8 mx-auto'>
     <section
       data-aos='fade-right'
       data-aos-duration='800'
       data-aos-anchor-placement='center-bottom'
       class='w-fit flex flex-col items-start justify-start mb-6'
     >
-      <h1 class='text-3xl md:text-4xl font-bold mb-2 text-gray-800 dark:text-white'>
+      <p class='accent-kicker text-xs uppercase tracking-[0.2em] font-semibold mb-2'>
+        Pastel studies and portraits
+      </p>
+      <h1 class='section-title text-3xl md:text-4xl font-bold mb-2 text-ink dark:text-white'>
         My Personal Work
       </h1>
     </section>
@@ -32,7 +35,7 @@ const photos = Object.values(photoModules)
             data-aos-anchor-placement='top-bottom'
             data-aos-delay={index * 100}
           >
-            <figure class='w-full text-gray-800 dark:text-white md:transition md:duration-300 md:ease-in-out md:hover:-translate-y-2 rounded-lg shadow-lg md:hover:shadow-xl overflow-hidden'>
+            <figure class='w-full text-gray-800 dark:text-white md:transition md:duration-300 md:ease-in-out md:hover:-translate-y-2 rounded-xl border border-white/60 dark:border-white/10 shadow-lg shadow-[rgb(108_75_117/15%)] md:hover:shadow-xl overflow-hidden bg-white/55 dark:bg-[#241d2c]/50'>
               <button
                 type='button'
                 class='block w-full cursor-zoom-in'

@@ -3,12 +3,46 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-rose: #9e0031;
-  --color-pink: #d34f73;
+  --color-rose: #b66085;
+  --color-pink: #de85a8;
+  --color-lilac: #cebde8;
+  --color-mint: #c2e7dd;
+  --color-peach: #f2d8c9;
+  --color-ink: #2f2a33;
 
   --font-sora: 'Sora Variable', sans-serif;
 }
 
 html {
   scroll-behavior: smooth;
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 0% -10%, rgb(242 216 201 / 42%), transparent 60%),
+    radial-gradient(900px 520px at 100% 0%, rgb(206 189 232 / 40%), transparent 60%),
+    radial-gradient(700px 420px at 50% 100%, rgb(194 231 221 / 32%), transparent 70%),
+    #fdf9f6;
+  color: #2f2a33;
+}
+
+.dark body {
+  background:
+    radial-gradient(1200px 600px at 0% -10%, rgb(182 96 133 / 18%), transparent 60%),
+    radial-gradient(900px 520px at 100% 0%, rgb(206 189 232 / 15%), transparent 60%),
+    radial-gradient(700px 420px at 50% 100%, rgb(194 231 221 / 12%), transparent 70%),
+    #141117;
+  color: #f2edf7;
+}
+
+.section-title {
+  letter-spacing: -0.02em;
+}
+
+.accent-kicker {
+  color: #9c628d;
+}
+
+.dark .accent-kicker {
+  color: #e6b2d0;
 }

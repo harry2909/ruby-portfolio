@@ -4,40 +4,48 @@ import ThemeToggle from './ThemeToggle.astro';
 
 <nav
   id='main-nav'
-  class='sticky top-0 z-50 font-medium w-full px-4 md:px-6 xl:px-10 mx-auto bg-white/90 dark:bg-black/90 backdrop-blur-sm transition-all duration-300 border-0 shadow-none transform translate-y-0'
+  class='sticky top-0 z-50 font-medium w-full px-4 md:px-6 xl:px-10 mx-auto transition-all duration-300 border-0 shadow-none transform translate-y-0'
 >
-  <div class='relative flex justify-center w-full items-center py-3 md:py-4'>
-    <ul class='flex items-center justify-center gap-x-5 md:gap-x-8 mx-auto text-sm md:text-base text-gray-800 dark:text-white'>
+  <div class='w-full max-w-[1800px] mx-auto flex flex-col items-center py-3 md:py-5'>
+    <ul class='w-full md:w-auto flex items-center justify-center gap-x-1 sm:gap-x-2 md:gap-x-5 px-2 sm:px-3 md:px-6 py-2 md:py-2.5 text-xs sm:text-sm md:text-base text-ink dark:text-white'>
       <li>
-        <a href='/ruby-portfolio/#intro' class='group transition duration-300'>
+        <a
+          href='/ruby-portfolio/#intro'
+          class='group relative inline-flex items-center rounded-full px-2.5 sm:px-3 md:px-3.5 py-1.5 transition duration-300 hover:bg-white/60 dark:hover:bg-white/10'
+        >
           Intro
           <span
-            class='block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-rose dark:bg-pink'
+            class='pointer-events-none absolute left-2 right-2 bottom-1 h-0.5 origin-left scale-x-0 bg-rose transition-transform duration-300 group-hover:scale-x-100 dark:bg-pink'
           ></span>
         </a>
       </li>
       <li>
-        <a href='/ruby-portfolio/#personal-work' class='group transition duration-300'>
+        <a
+          href='/ruby-portfolio/#personal-work'
+          class='group relative inline-flex items-center rounded-full px-2.5 sm:px-3 md:px-3.5 py-1.5 transition duration-300 hover:bg-white/60 dark:hover:bg-white/10'
+        >
           Personal Work
           <span
-            class='block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-rose dark:bg-pink'
+            class='pointer-events-none absolute left-2 right-2 bottom-1 h-0.5 origin-left scale-x-0 bg-rose transition-transform duration-300 group-hover:scale-x-100 dark:bg-pink'
           ></span>
         </a>
       </li>
       <li>
-        <a href='/ruby-portfolio/#video-work' class='group transition duration-300'>
+        <a
+          href='/ruby-portfolio/#video-work'
+          class='group relative inline-flex items-center rounded-full px-2.5 sm:px-3 md:px-3.5 py-1.5 transition duration-300 hover:bg-white/60 dark:hover:bg-white/10'
+        >
           Video Work
           <span
-            class='block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-rose dark:bg-pink'
+            class='pointer-events-none absolute left-2 right-2 bottom-1 h-0.5 origin-left scale-x-0 bg-rose transition-transform duration-300 group-hover:scale-x-100 dark:bg-pink'
           ></span>
         </a>
       </li>
     </ul>
-    <div class='absolute right-0 flex items-center'>
-      <ThemeToggle />
-    </div>
   </div>
 </nav>
+
+<ThemeToggle />
 
 <script>
   let lastScrollY = window.scrollY;
