@@ -1,41 +1,18 @@
 ---
-import Placeholder from '../assets/placeholder.jpg';
-const personalWork = [
-  {
-    title: 'Project 1',
-    description: 'Description 1',
-    image: Placeholder,
-  },
-  {
-    title: 'Project 2',
-    description: 'Description 2',
-    image: Placeholder,
-  },
-  {
-    title: 'Project 3',
-    description: 'Description 3',
-    image: Placeholder,
-  },
-  {
-    title: 'Project 4',
-    description: 'Description 4',
-    image: Placeholder,
-  },
-  {
-    title: 'Project 5',
-    description: 'Description 5',
-    image: Placeholder,
-  },
-  {
-    title: 'Project 6',
-    description: 'Description 6',
-    image: Placeholder,
-  },
-];
+type PhotoAsset = { src: string };
+
+const photoModules = import.meta.glob('../assets/project-photos/*.{jpg,JPG,jpeg,JPEG,png,PNG,webp,WEBP}', {
+  eager: true,
+  import: 'default',
+});
+
+const photos = Object.values(photoModules)
+  .map((asset): PhotoAsset => (typeof asset === 'string' ? { src: asset } : (asset as PhotoAsset)))
+  .sort((a, b) => a.src.localeCompare(b.src));
 ---
 
-<div id='personal-work' class='min-h-[100dvh] w-full flex items-center justify-center'>
-  <div class='w-full md:max-w-200 px-4 xl:px-0 mx-auto'>
+<div id='personal-work' class='min-h-dvh w-full flex items-center justify-center'>
+  <div class='w-full max-w-[1800px] px-4 md:px-8 xl:px-10 mx-auto'>
     <section
       data-aos='fade-right'
       data-aos-duration='800'
@@ -45,24 +22,31 @@ const personalWork = [
       <h1 class='text-3xl md:text-4xl font-bold mb-2 text-gray-800 dark:text-white'>
         My Personal Work
       </h1>
-      <h2 class='text-base md:text-lg text-rose dark:text-pink font-semibold'>Earth's essence</h2>
     </section>
-    <div
-      class='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 justify-items-center justify-content-center gap-10 pb-10'
-    >
+    <div class='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 pb-10'>
       {
-        personalWork.map((project, index) => (
+        photos.map((photo, index) => (
           <div
             data-aos='fade-right'
             data-aos-duration='800'
-            data-aos-anchor-placement='bottom-bottom'
+            data-aos-anchor-placement='top-bottom'
             data-aos-delay={index * 100}
           >
-            <figure class='w-full h-full md:w-60 md:h-60 text-gray-800 dark:text-white md:transition md:duration-300 md:ease-in-out md:hover:-translate-y-2 rounded-lg shadow-lg md:hover:shadow-xl'>
-              <img src={project.image.src} alt={project.title} class='w-full h-full object-cover rounded-lg' />
-              <figcaption class='text-center text-sm mt-1.5 text-rose dark:text-pink font-semibold'>
-                {project.title}
-              </figcaption>
+            <figure class='w-full text-gray-800 dark:text-white md:transition md:duration-300 md:ease-in-out md:hover:-translate-y-2 rounded-lg shadow-lg md:hover:shadow-xl overflow-hidden'>
+              <button
+                type='button'
+                class='block w-full cursor-zoom-in'
+                data-lightbox-trigger
+                data-lightbox-index={index}
+                aria-label={`Open image ${index + 1} in fullscreen`}
+              >
+                <img
+                  src={photo.src}
+                  alt={`Personal project photo ${index + 1}`}
+                  class='w-full aspect-4/5 object-cover rounded-lg'
+                  loading='lazy'
+                />
+              </button>
             </figure>
           </div>
         ))
@@ -70,3 +54,134 @@ const personalWork = [
     </div>
   </div>
 </div>
+
+<div
+  id='gallery-lightbox'
+  class='fixed inset-0 z-100 hidden items-center justify-center bg-black/95 p-4 md:p-8'
+  role='dialog'
+  aria-modal='true'
+  aria-label='Image gallery fullscreen viewer'
+>
+  <button
+    type='button'
+    class='absolute top-4 right-4 md:top-6 md:right-6 rounded-full bg-white/15 px-3 py-2 text-white hover:bg-white/25'
+    data-lightbox-close
+    aria-label='Close fullscreen gallery'
+  >
+    Close
+  </button>
+
+  <button
+    type='button'
+    class='absolute left-3 md:left-6 rounded-full bg-white/15 p-3 text-white hover:bg-white/25'
+    data-lightbox-prev
+    aria-label='Previous image'
+  >
+    <svg viewBox='0 0 24 24' class='h-6 w-6 fill-current' aria-hidden='true'>
+      <path d='M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z'></path>
+    </svg>
+  </button>
+
+  <img id='gallery-lightbox-image' class='max-h-[90vh] max-w-[92vw] object-contain select-none' alt='' />
+
+  <button
+    type='button'
+    class='absolute right-3 md:right-6 rounded-full bg-white/15 p-3 text-white hover:bg-white/25'
+    data-lightbox-next
+    aria-label='Next image'
+  >
+    <svg viewBox='0 0 24 24' class='h-6 w-6 fill-current' aria-hidden='true'>
+      <path d='m8.59 16.59 1.41 1.41 6-6-6-6-1.41 1.41L13.17 12z'></path>
+    </svg>
+  </button>
+
+  <div class='absolute bottom-4 md:bottom-6 rounded-full bg-white/15 px-3 py-1 text-xs text-white' data-lightbox-counter>
+    1 / 1
+  </div>
+</div>
+
+<script define:vars={{ photos }}>
+  const imageSources = photos.map((photo) => photo.src);
+  const triggers = document.querySelectorAll('[data-lightbox-trigger]');
+  const modal = document.getElementById('gallery-lightbox');
+  const modalImage = document.getElementById('gallery-lightbox-image');
+  const prevButton = modal?.querySelector('[data-lightbox-prev]');
+  const nextButton = modal?.querySelector('[data-lightbox-next]');
+  const closeButton = modal?.querySelector('[data-lightbox-close]');
+  const counter = modal?.querySelector('[data-lightbox-counter]');
+
+  let activeIndex = 0;
+  let touchStartX = 0;
+
+  const renderImage = () => {
+    if (!modalImage || !counter) return;
+    modalImage.src = imageSources[activeIndex];
+    modalImage.alt = `Fullscreen image ${activeIndex + 1}`;
+    counter.textContent = `${activeIndex + 1} / ${imageSources.length}`;
+  };
+
+  const showModal = (index) => {
+    if (!modal) return;
+    activeIndex = index;
+    renderImage();
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.classList.add('overflow-hidden');
+  };
+
+  const hideModal = () => {
+    if (!modal) return;
+    modal.classList.remove('flex');
+    modal.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+  };
+
+  const showNext = () => {
+    activeIndex = (activeIndex + 1) % imageSources.length;
+    renderImage();
+  };
+
+  const showPrev = () => {
+    activeIndex = (activeIndex - 1 + imageSources.length) % imageSources.length;
+    renderImage();
+  };
+
+  triggers.forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      const index = Number(trigger.getAttribute('data-lightbox-index') ?? 0);
+      showModal(index);
+    });
+  });
+
+  nextButton?.addEventListener('click', showNext);
+  prevButton?.addEventListener('click', showPrev);
+  closeButton?.addEventListener('click', hideModal);
+
+  modal?.addEventListener('click', (event) => {
+    if (event.target === modal) hideModal();
+  });
+
+  modal?.addEventListener('touchstart', (event) => {
+    touchStartX = event.changedTouches[0].clientX;
+  });
+
+  modal?.addEventListener('touchend', (event) => {
+    const touchEndX = event.changedTouches[0].clientX;
+    const deltaX = touchEndX - touchStartX;
+
+    if (Math.abs(deltaX) < 40) return;
+    if (deltaX < 0) {
+      showNext();
+    } else {
+      showPrev();
+    }
+  });
+
+  window.addEventListener('keydown', (event) => {
+    if (!modal || modal.classList.contains('hidden')) return;
+
+    if (event.key === 'Escape') hideModal();
+    if (event.key === 'ArrowRight') showNext();
+    if (event.key === 'ArrowLeft') showPrev();
+  });
+</script>

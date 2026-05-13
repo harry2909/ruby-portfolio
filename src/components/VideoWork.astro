@@ -1,30 +1,107 @@
-<div class='min-h-[100dvh] w-full overflow-hidden flex items-center justify-center'>
-  <div class='w-full md:max-w-200 px-4 xl:px-0 mx-auto'>
+---
+import VideoThumbOne from '../assets/project-photos/1.jpg';
+import VideoThumbTwo from '../assets/project-photos/2.jpg';
+
+const videoModules = import.meta.glob('../assets/video-work/*.mp4', {
+  eager: true,
+  import: 'default',
+});
+
+const videos = Object.values(videoModules).map((video) => video as string).sort().slice(0, 2);
+const videoThumbnails = [VideoThumbOne.src, VideoThumbTwo.src];
+---
+
+<div id='video-work' class='min-h-dvh w-full overflow-hidden flex items-center justify-center'>
+  <div class='w-full max-w-[1800px] px-4 md:px-8 xl:px-10 mx-auto'>
     <section
       data-aos='fade-left'
       data-aos-duration='800'
       data-aos-anchor-placement='center-bottom'
-      class='flex flex-col items-end justify-end mb-6'
+      class='flex flex-col items-start justify-start mb-6'
     >
       <h1 class='text-3xl md:text-4xl font-bold mb-2 text-gray-800 dark:text-white'>
         My Video Work
       </h1>
       <h2 class='text-base md:text-lg text-rose dark:text-pink font-semibold'>Video work</h2>
     </section>
-    <div
-      data-aos='fade-left'
-      data-aos-duration='800'
-      data-aos-anchor-placement='bottom-bottom'
-      class='rounded-lg overflow-hidden shadow-xl w-full'
-    >
-      <iframe
-        class='w-full aspect-video'
-        src='https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?si=7UwmbsvfMvX8g_4g'
-        title='YouTube video player'
-        frameborder='0'
-        allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-        referrerpolicy='strict-origin-when-cross-origin'
-        allowfullscreen></iframe>
+    <div class='grid grid-cols-1 md:grid-cols-2 gap-8 pb-10'>
+      {
+        videos.map((videoSrc, index) => (
+          <div
+            data-aos='fade-left'
+            data-aos-duration='800'
+            data-aos-anchor-placement='bottom-bottom'
+            data-aos-delay={index * 100}
+            data-video-card
+            class='relative rounded-lg overflow-hidden shadow-xl w-full bg-black/10 dark:bg-black/30'
+          >
+            <video
+              class='w-full aspect-video object-cover'
+              controls
+              preload='none'
+              playsinline
+              poster={videoThumbnails[index]}
+            >
+              <source src={videoSrc} type='video/mp4' />
+              Your browser does not support the video tag.
+            </video>
+            <button
+              type='button'
+              class='video-overlay absolute inset-0 z-10 flex items-center justify-center bg-black/25 transition-opacity duration-200'
+              aria-label='Play video'
+            >
+              <span class='flex items-center gap-2 rounded-full bg-black/70 px-4 py-2 text-white'>
+                <span class='flex h-6 w-6 items-center justify-center rounded-full bg-white/90 text-black'>
+                  <svg viewBox='0 0 24 24' class='h-4 w-4 fill-current' aria-hidden='true'>
+                    <path d='M8 5v14l11-7z'></path>
+                  </svg>
+                </span>
+                <span class='text-sm font-semibold tracking-wide'>Play Video</span>
+              </span>
+            </button>
+          </div>
+        ))
+      }
     </div>
   </div>
 </div>
+
+<script>
+  const setupVideoOverlay = () => {
+    const cards = document.querySelectorAll<HTMLElement>('[data-video-card]');
+
+    cards.forEach((card) => {
+      const video = card.querySelector('video');
+      const overlay = card.querySelector<HTMLElement>('.video-overlay');
+
+      if (!video || !overlay) return;
+
+      const showOverlay = () => {
+        overlay.classList.remove('opacity-0', 'pointer-events-none');
+      };
+
+      const hideOverlay = () => {
+        overlay.classList.add('opacity-0', 'pointer-events-none');
+      };
+
+      overlay.addEventListener('click', async () => {
+        try {
+          await video.play();
+          hideOverlay();
+        } catch {
+          showOverlay();
+        }
+      });
+
+      video.addEventListener('play', hideOverlay);
+      video.addEventListener('pause', showOverlay);
+      video.addEventListener('ended', showOverlay);
+    });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupVideoOverlay, { once: true });
+  } else {
+    setupVideoOverlay();
+  }
+</script>
